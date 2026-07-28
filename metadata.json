@@ -1,0 +1,6 @@
+{
+  "name": "Máy Chọn Số May Mắn",
+  "description": "Phần mềm chọn số ngẫu nhiên vui nhộn dành cho trẻ em.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
