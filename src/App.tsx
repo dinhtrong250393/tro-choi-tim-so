@@ -67,7 +67,7 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
-          className="h-full overflow-y-auto"
+          className="h-full overflow-hidden"
         >
           {activeTab === 'number' && <NumberGame />}
           {activeTab === 'animal' && <AnimalGame />}

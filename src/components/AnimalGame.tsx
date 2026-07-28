@@ -114,7 +114,7 @@ export default function AnimalGame() {
   };
 
   return (
-    <div className="min-h-[100dvh] bg-gradient-to-br from-emerald-100 via-teal-100 to-cyan-200 flex flex-col items-center pt-14 pb-4 md:pt-24 md:pb-10 px-2 md:px-4 relative overflow-y-auto">
+    <div className="h-[100dvh] bg-gradient-to-br from-emerald-100 via-teal-100 to-cyan-200 flex flex-col items-center pt-16 pb-2 md:pt-24 md:pb-10 px-2 md:px-4 relative overflow-hidden">
       
       {/* Decorative background elements */}
       <div className="absolute top-20 left-4 md:left-10 text-emerald-200/50 text-6xl md:text-9xl rotate-[-20deg] pointer-events-none">🌿</div>
@@ -123,25 +123,25 @@ export default function AnimalGame() {
       <motion.div 
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="bg-white/95 backdrop-blur-md rounded-[1.5rem] md:rounded-[2rem] shadow-2xl p-3 md:p-8 mb-2 md:mb-8 border-4 border-white text-center max-w-2xl w-full z-10 shrink-0"
+        className="bg-white/95 backdrop-blur-md rounded-[1.5rem] md:rounded-[2rem] shadow-2xl p-2 md:p-8 mb-2 md:mb-8 border-4 border-white text-center max-w-2xl w-full z-10 shrink-0"
       >
-        <h1 className="text-2xl md:text-5xl font-black text-teal-600 mb-1 md:mb-2 flex flex-wrap items-center justify-center gap-2 md:gap-3">
+        <h1 className="text-xl md:text-5xl font-black text-teal-600 mb-1 md:mb-2 flex flex-wrap items-center justify-center gap-1 md:gap-3">
           <Star className="text-yellow-400 fill-yellow-400 hidden md:block" size={40} />
           Bé hãy tìm các bạn
           <motion.div 
             animate={{ y: [0, -5, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="text-4xl md:text-6xl mx-1 md:mx-2 drop-shadow-md bg-teal-50 px-3 md:px-4 py-1 md:py-2 rounded-2xl md:rounded-3xl border-4 border-teal-100"
+            className="text-3xl md:text-6xl mx-1 md:mx-2 drop-shadow-md bg-teal-50 px-3 md:px-4 py-0 md:py-2 rounded-xl md:rounded-3xl border-2 md:border-4 border-teal-100"
           >
             {targetAnimal}
           </motion.div>
           nhé!
-          <Star className="text-yellow-400 fill-yellow-400" size={40} />
+          <Star className="text-yellow-400 fill-yellow-400 hidden md:block" size={40} />
         </h1>
       </motion.div>
 
-      <div className="w-full max-w-3xl flex-1 flex flex-col items-center justify-center z-10 py-4">
-        <div className="grid grid-cols-4 gap-2 md:gap-8 w-full px-1 md:px-4 max-w-[95vw]">
+      <div className="w-full max-w-3xl flex-1 flex flex-col items-center justify-center min-h-0 py-0 md:py-4 z-10">
+        <div className="grid grid-cols-4 gap-2 md:gap-8 w-full px-1 md:px-4 max-w-[95vw] md:max-w-3xl mx-auto h-full max-h-[50vh] md:max-h-[60vh] content-center justify-items-center">
           <AnimatePresence>
             {items.map((item) => (
               <motion.button
@@ -159,18 +159,18 @@ export default function AnimalGame() {
                 transition={shakeId === item.id ? { duration: 0.4 } : { type: 'spring', bounce: 0.5 }}
                 disabled={item.found || item.wrong || isWon}
                 className={`
-                  relative aspect-square rounded-[1rem] md:rounded-[2.5rem] flex items-center justify-center text-4xl md:text-7xl font-black border-4 md:border-8 transition-all
+                  relative aspect-square w-[18vw] max-w-[120px] md:w-full md:max-w-[160px] rounded-[1rem] md:rounded-[2.5rem] flex items-center justify-center text-3xl md:text-7xl font-black border-4 md:border-8 transition-all
                   ${item.found 
                     ? 'bg-emerald-100 border-emerald-300 scale-90 shadow-inner opacity-80' 
                     : item.wrong
                       ? 'bg-rose-50 border-rose-200 opacity-80 scale-95 shadow-inner'
-                      : 'bg-white border-teal-200 shadow-[0_8px_0_0_rgba(153,246,228,1)] hover:shadow-[0_12px_0_0_rgba(153,246,228,1)] hover:-translate-y-2 active:translate-y-2 active:shadow-none cursor-pointer'
+                      : 'bg-white border-teal-200 shadow-[0_4px_0_0_rgba(153,246,228,1)] md:shadow-[0_8px_0_0_rgba(153,246,228,1)] hover:shadow-[0_12px_0_0_rgba(153,246,228,1)] hover:-translate-y-1 md:hover:-translate-y-2 active:translate-y-1 md:active:translate-y-2 active:shadow-none cursor-pointer'
                   }
-                  ${shakeId === item.id ? 'bg-red-100 border-red-300 shadow-[0_8px_0_0_rgba(252,165,165,1)]' : ''}
+                  ${shakeId === item.id ? 'bg-red-100 border-red-300 shadow-[0_4px_0_0_rgba(252,165,165,1)] md:shadow-[0_8px_0_0_rgba(252,165,165,1)]' : ''}
                 `}
               >
                 {item.wrong ? (
-                  <X size={72} className="text-red-400 drop-shadow-sm" strokeWidth={5} />
+                  <X size={40} className="text-red-400 drop-shadow-sm md:w-16 md:h-16" strokeWidth={5} />
                 ) : (
                   <span className="drop-shadow-sm">{item.value}</span>
                 )}
@@ -185,10 +185,10 @@ export default function AnimalGame() {
                       transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
                       className="w-full h-full relative"
                     >
-                      <Sparkles className="absolute -top-4 left-1/2 -translate-x-1/2 text-yellow-400 fill-yellow-400 drop-shadow-md" size={32} />
-                      <Sparkles className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-teal-400 fill-teal-400 drop-shadow-md" size={32} />
-                      <Sparkles className="absolute top-1/2 -left-4 -translate-y-1/2 text-emerald-400 fill-emerald-400 drop-shadow-md" size={32} />
-                      <Sparkles className="absolute top-1/2 -right-4 -translate-y-1/2 text-green-400 fill-green-400 drop-shadow-md" size={32} />
+                      <Sparkles className="absolute -top-2 md:-top-4 left-1/2 -translate-x-1/2 text-yellow-400 fill-yellow-400 drop-shadow-md w-4 h-4 md:w-8 md:h-8" />
+                      <Sparkles className="absolute -bottom-2 md:-bottom-4 left-1/2 -translate-x-1/2 text-teal-400 fill-teal-400 drop-shadow-md w-4 h-4 md:w-8 md:h-8" />
+                      <Sparkles className="absolute top-1/2 -left-2 md:-left-4 -translate-y-1/2 text-emerald-400 fill-emerald-400 drop-shadow-md w-4 h-4 md:w-8 md:h-8" />
+                      <Sparkles className="absolute top-1/2 -right-2 md:-right-4 -translate-y-1/2 text-green-400 fill-green-400 drop-shadow-md w-4 h-4 md:w-8 md:h-8" />
                     </motion.div>
                   </motion.div>
                 )}
@@ -208,9 +208,9 @@ export default function AnimalGame() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={initGame}
-            className="mt-6 md:mt-12 bg-gradient-to-b from-teal-400 to-teal-600 text-white font-black text-xl md:text-3xl px-8 md:px-10 py-3 md:py-5 rounded-full shadow-[0_8px_0_0_rgba(15,118,110,1)] hover:shadow-[0_12px_0_0_rgba(15,118,110,1)] hover:-translate-y-1 active:translate-y-2 active:shadow-none flex items-center gap-3 md:gap-4 border-4 border-teal-300 z-10"
+            className="mt-2 mb-2 md:mt-12 bg-gradient-to-b from-teal-400 to-teal-600 text-white font-black text-lg md:text-3xl px-6 md:px-10 py-2 md:py-5 rounded-full shadow-[0_4px_0_0_rgba(15,118,110,1)] md:shadow-[0_8px_0_0_rgba(15,118,110,1)] hover:shadow-[0_12px_0_0_rgba(15,118,110,1)] hover:-translate-y-1 active:translate-y-2 active:shadow-none flex items-center gap-2 md:gap-4 border-2 md:border-4 border-teal-300 z-10"
           >
-            <RotateCcw size={24} className="animate-spin" />
+            <RotateCcw size={20} className={`md:w-8 md:h-8 animate-spin`} />
             ĐỔI BẠN KHÁC!
           </motion.button>
         )}
@@ -224,9 +224,9 @@ export default function AnimalGame() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={initGame}
-          className="mt-6 md:mt-12 bg-white text-teal-500 font-bold text-lg md:text-xl px-6 md:px-8 py-2 md:py-3 rounded-full shadow-sm hover:shadow-md flex items-center gap-2 border-2 border-teal-100 z-10"
+          className="mt-2 mb-2 md:mt-12 bg-white text-teal-500 font-bold text-base md:text-xl px-4 md:px-8 py-1 md:py-3 rounded-full shadow-sm hover:shadow-md flex items-center gap-2 border-2 border-teal-100 z-10"
         >
-          <RotateCcw size={20} />
+          <RotateCcw size={16} className="md:w-5 md:h-5" />
           Đổi bạn khác
         </motion.button>
       )}
