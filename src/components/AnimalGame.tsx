@@ -114,7 +114,7 @@ export default function AnimalGame() {
   };
 
   return (
-    <div className="h-full bg-gradient-to-br from-emerald-100 via-teal-100 to-cyan-200 flex flex-col items-center pt-20 pb-4 md:pt-24 md:pb-10 px-2 md:px-4 relative overflow-y-auto hide-scrollbar">
+    <div className="min-h-[100dvh] bg-gradient-to-br from-emerald-100 via-teal-100 to-cyan-200 flex flex-col items-center pt-14 pb-4 md:pt-24 md:pb-10 px-2 md:px-4 relative overflow-y-auto">
       
       {/* Decorative background elements */}
       <div className="absolute top-20 left-4 md:left-10 text-emerald-200/50 text-6xl md:text-9xl rotate-[-20deg] pointer-events-none">🌿</div>
@@ -123,7 +123,7 @@ export default function AnimalGame() {
       <motion.div 
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="bg-white/95 backdrop-blur-md rounded-[2rem] shadow-2xl p-4 md:p-8 mb-4 md:mb-8 border-4 border-white text-center max-w-2xl w-full z-10"
+        className="bg-white/95 backdrop-blur-md rounded-[1.5rem] md:rounded-[2rem] shadow-2xl p-3 md:p-8 mb-2 md:mb-8 border-4 border-white text-center max-w-2xl w-full z-10 shrink-0"
       >
         <h1 className="text-2xl md:text-5xl font-black text-teal-600 mb-1 md:mb-2 flex flex-wrap items-center justify-center gap-2 md:gap-3">
           <Star className="text-yellow-400 fill-yellow-400 hidden md:block" size={40} />
@@ -140,8 +140,8 @@ export default function AnimalGame() {
         </h1>
       </motion.div>
 
-      <div className="w-full max-w-3xl flex-1 min-h-0 flex flex-col items-center justify-center z-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 w-full px-2 md:px-4">
+      <div className="w-full max-w-3xl flex-1 flex flex-col items-center justify-center z-10 py-4">
+        <div className="grid grid-cols-4 gap-2 md:gap-8 w-full px-1 md:px-4 max-w-[95vw]">
           <AnimatePresence>
             {items.map((item) => (
               <motion.button
@@ -159,7 +159,7 @@ export default function AnimalGame() {
                 transition={shakeId === item.id ? { duration: 0.4 } : { type: 'spring', bounce: 0.5 }}
                 disabled={item.found || item.wrong || isWon}
                 className={`
-                  relative aspect-square rounded-[2rem] md:rounded-[2.5rem] flex items-center justify-center text-5xl md:text-7xl font-black border-4 md:border-8 transition-all
+                  relative aspect-square rounded-[1rem] md:rounded-[2.5rem] flex items-center justify-center text-4xl md:text-7xl font-black border-4 md:border-8 transition-all
                   ${item.found 
                     ? 'bg-emerald-100 border-emerald-300 scale-90 shadow-inner opacity-80' 
                     : item.wrong

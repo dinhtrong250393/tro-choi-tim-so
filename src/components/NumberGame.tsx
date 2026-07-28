@@ -107,11 +107,11 @@ export default function NumberGame() {
   };
 
   return (
-    <div className="h-full bg-gradient-to-br from-cyan-100 via-blue-100 to-indigo-200 flex flex-col items-center pt-20 pb-4 md:pt-24 md:pb-10 px-2 md:px-4 overflow-y-auto hide-scrollbar">
+    <div className="min-h-[100dvh] bg-gradient-to-br from-cyan-100 via-blue-100 to-indigo-200 flex flex-col items-center pt-14 pb-4 md:pt-24 md:pb-10 px-2 md:px-4 overflow-y-auto">
       <motion.div 
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="bg-white/90 backdrop-blur-md rounded-[2rem] shadow-xl p-4 md:p-8 mb-4 md:mb-8 border-4 border-white text-center max-w-2xl w-full"
+        className="bg-white/90 backdrop-blur-md rounded-[1.5rem] md:rounded-[2rem] shadow-xl p-3 md:p-8 mb-2 md:mb-8 border-4 border-white text-center max-w-2xl w-full shrink-0"
       >
         <h1 className="text-2xl md:text-5xl font-black text-indigo-600 mb-1 md:mb-2 flex flex-wrap items-center justify-center gap-2 md:gap-3">
           <Star className="text-yellow-400 fill-yellow-400 hidden md:block" size={40} />
@@ -124,8 +124,8 @@ export default function NumberGame() {
         </h1>
       </motion.div>
 
-      <div className="w-full max-w-3xl flex-1 min-h-0 flex flex-col items-center justify-center">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 w-full px-2 md:px-4">
+      <div className="w-full max-w-3xl flex-1 flex flex-col items-center justify-center py-4">
+        <div className="grid grid-cols-4 gap-2 md:gap-8 w-full px-1 md:px-4 max-w-[95vw]">
           <AnimatePresence>
             {items.map((item) => (
               <motion.button
@@ -143,7 +143,7 @@ export default function NumberGame() {
                 transition={shakeId === item.id ? { duration: 0.4 } : { type: 'spring', bounce: 0.5 }}
                 disabled={item.found || item.wrong || isWon}
                 className={`
-                  relative aspect-square rounded-full flex items-center justify-center text-5xl md:text-7xl font-black border-4 md:border-8 transition-colors
+                  relative aspect-square rounded-full flex items-center justify-center text-4xl md:text-7xl font-black border-4 md:border-8 transition-colors
                   ${item.found 
                     ? 'bg-emerald-100 border-emerald-300 text-emerald-500 scale-95 shadow-inner' 
                     : item.wrong
