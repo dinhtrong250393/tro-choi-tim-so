@@ -119,35 +119,35 @@ export default function FeedGame() {
   }, [animals]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-100 via-orange-100 to-rose-200 flex flex-col items-center pt-24 pb-10 px-4 relative">
+    <div className="h-full bg-gradient-to-br from-amber-100 via-orange-100 to-rose-200 flex flex-col items-center pt-20 pb-4 md:pt-24 md:pb-10 px-2 md:px-4 relative overflow-y-auto hide-scrollbar">
       
       {/* Decorative background elements */}
-      <div className="absolute top-20 left-10 text-orange-200/50 text-9xl rotate-[-20deg] pointer-events-none">🦴</div>
-      <div className="absolute bottom-20 right-10 text-rose-200/50 text-9xl rotate-[15deg] pointer-events-none">🥕</div>
-      <div className="absolute top-40 right-20 text-amber-200/40 text-7xl rotate-[30deg] pointer-events-none">🍎</div>
+      <div className="absolute top-20 left-4 md:left-10 text-orange-200/50 text-6xl md:text-9xl rotate-[-20deg] pointer-events-none">🦴</div>
+      <div className="absolute bottom-20 right-4 md:right-10 text-rose-200/50 text-6xl md:text-9xl rotate-[15deg] pointer-events-none">🥕</div>
+      <div className="absolute top-40 right-10 md:right-20 text-amber-200/40 text-4xl md:text-7xl rotate-[30deg] pointer-events-none">🍎</div>
 
       {/* Title */}
       <motion.div 
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="bg-white/95 backdrop-blur-md rounded-[2rem] shadow-2xl p-6 md:p-8 mb-8 border-4 border-white text-center max-w-2xl w-full z-10"
+        className="bg-white/95 backdrop-blur-md rounded-[2rem] shadow-2xl p-4 md:p-8 mb-4 md:mb-8 border-4 border-white text-center max-w-2xl w-full z-10"
       >
-        <h1 className="text-3xl md:text-5xl font-black text-orange-500 mb-2 flex flex-wrap items-center justify-center gap-3">
-          <Star className="text-yellow-400 fill-yellow-400" size={40} />
+        <h1 className="text-2xl md:text-5xl font-black text-orange-500 mb-1 md:mb-2 flex flex-wrap items-center justify-center gap-2 md:gap-3">
+          <Star className="text-yellow-400 fill-yellow-400 hidden md:block" size={40} />
           Bé hãy cho các bạn ăn nhé!
-          <Star className="text-yellow-400 fill-yellow-400" size={40} />
+          <Star className="text-yellow-400 fill-yellow-400 hidden md:block" size={40} />
         </h1>
-        <p className="text-lg md:text-xl font-bold text-orange-400 mt-2 bg-orange-50 inline-block px-4 py-2 rounded-full border-2 border-orange-100">
+        <p className="text-sm md:text-xl font-bold text-orange-400 mt-2 bg-orange-50 inline-block px-3 md:px-4 py-1 md:py-2 rounded-full border-2 border-orange-100">
           Chọn một bạn động vật và món ăn tương ứng
         </p>
       </motion.div>
 
       {/* Game Board */}
-      <div className="w-full max-w-4xl flex-1 flex flex-col items-center justify-center relative z-10">
-        <div className="flex w-full justify-between gap-4 md:gap-12 px-2 md:px-8">
+      <div className="w-full max-w-4xl flex-1 min-h-0 flex flex-col items-center justify-center relative z-10">
+        <div className="flex w-full justify-between gap-2 md:gap-12 px-1 md:px-8">
           
           {/* Animals Column */}
-          <div className="flex flex-col gap-4 w-1/2 items-center">
+          <div className="flex flex-col gap-2 md:gap-4 w-1/2 items-center">
             {animals.map((item) => (
               <motion.button
                 key={item.id}
@@ -166,7 +166,7 @@ export default function FeedGame() {
                 transition={shakeAnimal === item.emoji ? { duration: 0.4 } : { type: 'spring', bounce: 0.5 }}
                 disabled={item.matched || isWon || shakeAnimal !== null}
                 className={`
-                  relative w-full aspect-[2/1] md:aspect-[3/1] max-w-[200px] rounded-[2rem] flex items-center justify-center text-6xl md:text-7xl font-black border-4 transition-all
+                  relative w-full py-2 md:py-0 aspect-[2/1] md:aspect-[3/1] max-w-[140px] md:max-w-[200px] rounded-[1.5rem] md:rounded-[2rem] flex items-center justify-center text-5xl md:text-7xl font-black border-4 transition-all
                   ${item.matched 
                     ? 'bg-emerald-100 border-emerald-300 scale-90 opacity-60 shadow-inner' 
                     : selectedAnimal === item.emoji
@@ -197,7 +197,7 @@ export default function FeedGame() {
           </div>
 
           {/* Foods Column */}
-          <div className="flex flex-col gap-4 w-1/2 items-center">
+          <div className="flex flex-col gap-2 md:gap-4 w-1/2 items-center">
             {foods.map((item) => (
               <motion.button
                 key={item.id}
@@ -216,7 +216,7 @@ export default function FeedGame() {
                 transition={shakeFood === item.emoji ? { duration: 0.4 } : { type: 'spring', bounce: 0.5 }}
                 disabled={item.matched || isWon || shakeFood !== null}
                 className={`
-                  relative w-full aspect-[2/1] md:aspect-[3/1] max-w-[200px] rounded-[2rem] flex items-center justify-center text-6xl md:text-7xl font-black border-4 transition-all
+                  relative w-full py-2 md:py-0 aspect-[2/1] md:aspect-[3/1] max-w-[140px] md:max-w-[200px] rounded-[1.5rem] md:rounded-[2rem] flex items-center justify-center text-5xl md:text-7xl font-black border-4 transition-all
                   ${item.matched 
                     ? 'bg-emerald-100 border-emerald-300 scale-90 opacity-60 shadow-inner' 
                     : selectedFood === item.emoji
@@ -260,9 +260,9 @@ export default function FeedGame() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={initGame}
-            className="mt-10 bg-gradient-to-b from-orange-400 to-red-500 text-white font-black text-2xl md:text-3xl px-10 py-5 rounded-full shadow-[0_8px_0_0_rgba(194,65,12,1)] hover:shadow-[0_12px_0_0_rgba(194,65,12,1)] hover:-translate-y-1 active:translate-y-2 active:shadow-none flex items-center gap-4 border-4 border-orange-300 z-10"
+            className="mt-6 md:mt-10 bg-gradient-to-b from-orange-400 to-red-500 text-white font-black text-xl md:text-3xl px-8 md:px-10 py-3 md:py-5 rounded-full shadow-[0_8px_0_0_rgba(194,65,12,1)] hover:shadow-[0_12px_0_0_rgba(194,65,12,1)] hover:-translate-y-1 active:translate-y-2 active:shadow-none flex items-center gap-3 md:gap-4 border-4 border-orange-300 z-10"
           >
-            <RotateCcw size={32} className="animate-spin" />
+            <RotateCcw size={24} className="animate-spin" />
             CHƠI LẠI NÀO!
           </motion.button>
         )}
@@ -276,7 +276,7 @@ export default function FeedGame() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={initGame}
-          className="mt-12 bg-white text-orange-400 font-bold text-xl px-8 py-3 rounded-full shadow-sm hover:shadow-md flex items-center gap-2 border-2 border-orange-100 z-10"
+          className="mt-6 md:mt-12 bg-white text-orange-400 font-bold text-lg md:text-xl px-6 md:px-8 py-2 md:py-3 rounded-full shadow-sm hover:shadow-md flex items-center gap-2 border-2 border-orange-100 z-10"
         >
           <RotateCcw size={20} />
           Chơi lại

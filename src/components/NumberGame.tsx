@@ -107,16 +107,16 @@ export default function NumberGame() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-100 via-blue-100 to-indigo-200 flex flex-col items-center pt-24 pb-10 px-4">
+    <div className="h-full bg-gradient-to-br from-cyan-100 via-blue-100 to-indigo-200 flex flex-col items-center pt-20 pb-4 md:pt-24 md:pb-10 px-2 md:px-4 overflow-y-auto hide-scrollbar">
       <motion.div 
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="bg-white/90 backdrop-blur-md rounded-[2rem] shadow-xl p-6 md:p-8 mb-8 border-4 border-white text-center max-w-2xl w-full"
+        className="bg-white/90 backdrop-blur-md rounded-[2rem] shadow-xl p-4 md:p-8 mb-4 md:mb-8 border-4 border-white text-center max-w-2xl w-full"
       >
-        <h1 className="text-3xl md:text-5xl font-black text-indigo-600 mb-2 flex flex-wrap items-center justify-center gap-3">
-          <Star className="text-yellow-400 fill-yellow-400" size={40} />
+        <h1 className="text-2xl md:text-5xl font-black text-indigo-600 mb-1 md:mb-2 flex flex-wrap items-center justify-center gap-2 md:gap-3">
+          <Star className="text-yellow-400 fill-yellow-400 hidden md:block" size={40} />
           Bé hãy tìm các số
-          <span className="text-pink-500 text-5xl md:text-6xl mx-1 bg-pink-100 rounded-2xl px-5 py-1 border-4 border-pink-200 shadow-inner">
+          <span className="text-pink-500 text-4xl md:text-6xl mx-1 bg-pink-100 rounded-2xl px-4 py-1 border-4 border-pink-200 shadow-inner">
             {targetNumber}
           </span>
           nhé!
@@ -124,8 +124,8 @@ export default function NumberGame() {
         </h1>
       </motion.div>
 
-      <div className="w-full max-w-3xl flex-1 flex flex-col items-center justify-center">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 w-full px-4">
+      <div className="w-full max-w-3xl flex-1 min-h-0 flex flex-col items-center justify-center">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 w-full px-2 md:px-4">
           <AnimatePresence>
             {items.map((item) => (
               <motion.button
@@ -143,7 +143,7 @@ export default function NumberGame() {
                 transition={shakeId === item.id ? { duration: 0.4 } : { type: 'spring', bounce: 0.5 }}
                 disabled={item.found || item.wrong || isWon}
                 className={`
-                  relative aspect-square rounded-full flex items-center justify-center text-6xl md:text-7xl font-black border-8 transition-colors
+                  relative aspect-square rounded-full flex items-center justify-center text-5xl md:text-7xl font-black border-4 md:border-8 transition-colors
                   ${item.found 
                     ? 'bg-emerald-100 border-emerald-300 text-emerald-500 scale-95 shadow-inner' 
                     : item.wrong
@@ -189,9 +189,9 @@ export default function NumberGame() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={initGame}
-        className="mt-12 bg-gradient-to-b from-orange-400 to-orange-600 text-white font-black text-2xl md:text-3xl px-10 py-5 rounded-full shadow-[0_8px_0_0_rgba(194,65,12,1)] hover:shadow-[0_12px_0_0_rgba(194,65,12,1)] hover:-translate-y-1 active:translate-y-2 active:shadow-none flex items-center gap-4 border-4 border-orange-300"
+        className="mt-6 md:mt-12 bg-gradient-to-b from-orange-400 to-orange-600 text-white font-black text-xl md:text-3xl px-8 md:px-10 py-3 md:py-5 rounded-full shadow-[0_8px_0_0_rgba(194,65,12,1)] hover:shadow-[0_12px_0_0_rgba(194,65,12,1)] hover:-translate-y-1 active:translate-y-2 active:shadow-none flex items-center gap-3 md:gap-4 border-4 border-orange-300"
       >
-        <RotateCcw size={32} className={isWon ? "animate-spin" : ""} />
+        <RotateCcw size={24} className={isWon ? "animate-spin" : ""} />
         {isWon ? 'CHƠI TIẾP NÀO!' : 'ĐỔI SỐ KHÁC'}
       </motion.button>
     </div>

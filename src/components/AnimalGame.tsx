@@ -114,24 +114,24 @@ export default function AnimalGame() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-100 via-teal-100 to-cyan-200 flex flex-col items-center pt-24 pb-10 px-4 relative">
+    <div className="h-full bg-gradient-to-br from-emerald-100 via-teal-100 to-cyan-200 flex flex-col items-center pt-20 pb-4 md:pt-24 md:pb-10 px-2 md:px-4 relative overflow-y-auto hide-scrollbar">
       
       {/* Decorative background elements */}
-      <div className="absolute top-20 left-10 text-emerald-200/50 text-9xl rotate-[-20deg] pointer-events-none">🌿</div>
-      <div className="absolute bottom-20 right-10 text-cyan-200/50 text-9xl rotate-[15deg] pointer-events-none">🍃</div>
+      <div className="absolute top-20 left-4 md:left-10 text-emerald-200/50 text-6xl md:text-9xl rotate-[-20deg] pointer-events-none">🌿</div>
+      <div className="absolute bottom-20 right-4 md:right-10 text-cyan-200/50 text-6xl md:text-9xl rotate-[15deg] pointer-events-none">🍃</div>
 
       <motion.div 
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="bg-white/95 backdrop-blur-md rounded-[2rem] shadow-2xl p-6 md:p-8 mb-8 border-4 border-white text-center max-w-2xl w-full z-10"
+        className="bg-white/95 backdrop-blur-md rounded-[2rem] shadow-2xl p-4 md:p-8 mb-4 md:mb-8 border-4 border-white text-center max-w-2xl w-full z-10"
       >
-        <h1 className="text-3xl md:text-5xl font-black text-teal-600 mb-2 flex flex-wrap items-center justify-center gap-3">
-          <Star className="text-yellow-400 fill-yellow-400" size={40} />
+        <h1 className="text-2xl md:text-5xl font-black text-teal-600 mb-1 md:mb-2 flex flex-wrap items-center justify-center gap-2 md:gap-3">
+          <Star className="text-yellow-400 fill-yellow-400 hidden md:block" size={40} />
           Bé hãy tìm các bạn
           <motion.div 
-            animate={{ y: [0, -10, 0] }}
+            animate={{ y: [0, -5, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="text-6xl mx-2 drop-shadow-md bg-teal-50 px-4 py-2 rounded-3xl border-4 border-teal-100"
+            className="text-4xl md:text-6xl mx-1 md:mx-2 drop-shadow-md bg-teal-50 px-3 md:px-4 py-1 md:py-2 rounded-2xl md:rounded-3xl border-4 border-teal-100"
           >
             {targetAnimal}
           </motion.div>
@@ -140,8 +140,8 @@ export default function AnimalGame() {
         </h1>
       </motion.div>
 
-      <div className="w-full max-w-3xl flex-1 flex flex-col items-center justify-center z-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 w-full px-4">
+      <div className="w-full max-w-3xl flex-1 min-h-0 flex flex-col items-center justify-center z-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 w-full px-2 md:px-4">
           <AnimatePresence>
             {items.map((item) => (
               <motion.button
@@ -159,7 +159,7 @@ export default function AnimalGame() {
                 transition={shakeId === item.id ? { duration: 0.4 } : { type: 'spring', bounce: 0.5 }}
                 disabled={item.found || item.wrong || isWon}
                 className={`
-                  relative aspect-square rounded-[2.5rem] flex items-center justify-center text-6xl md:text-7xl font-black border-8 transition-all
+                  relative aspect-square rounded-[2rem] md:rounded-[2.5rem] flex items-center justify-center text-5xl md:text-7xl font-black border-4 md:border-8 transition-all
                   ${item.found 
                     ? 'bg-emerald-100 border-emerald-300 scale-90 shadow-inner opacity-80' 
                     : item.wrong
@@ -208,9 +208,9 @@ export default function AnimalGame() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={initGame}
-            className="mt-12 bg-gradient-to-b from-teal-400 to-teal-600 text-white font-black text-2xl md:text-3xl px-10 py-5 rounded-full shadow-[0_8px_0_0_rgba(15,118,110,1)] hover:shadow-[0_12px_0_0_rgba(15,118,110,1)] hover:-translate-y-1 active:translate-y-2 active:shadow-none flex items-center gap-4 border-4 border-teal-300 z-10"
+            className="mt-6 md:mt-12 bg-gradient-to-b from-teal-400 to-teal-600 text-white font-black text-xl md:text-3xl px-8 md:px-10 py-3 md:py-5 rounded-full shadow-[0_8px_0_0_rgba(15,118,110,1)] hover:shadow-[0_12px_0_0_rgba(15,118,110,1)] hover:-translate-y-1 active:translate-y-2 active:shadow-none flex items-center gap-3 md:gap-4 border-4 border-teal-300 z-10"
           >
-            <RotateCcw size={32} className="animate-spin" />
+            <RotateCcw size={24} className="animate-spin" />
             ĐỔI BẠN KHÁC!
           </motion.button>
         )}
@@ -224,7 +224,7 @@ export default function AnimalGame() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={initGame}
-          className="mt-12 bg-white text-teal-500 font-bold text-xl px-8 py-3 rounded-full shadow-sm hover:shadow-md flex items-center gap-2 border-2 border-teal-100 z-10"
+          className="mt-6 md:mt-12 bg-white text-teal-500 font-bold text-lg md:text-xl px-6 md:px-8 py-2 md:py-3 rounded-full shadow-sm hover:shadow-md flex items-center gap-2 border-2 border-teal-100 z-10"
         >
           <RotateCcw size={20} />
           Đổi bạn khác
