@@ -16,8 +16,9 @@ const ANIMALS = ['🐕', '🐈', '🐇', '🐅', '🐄', '🐖', '🐘', '🦒',
 export default function AnimalGame() {
   const [targetAnimal, setTargetAnimal] = useState<string>('🐕');
   const [items, setItems] = useState<AnimalItem[]>([]);
-  const [isWon, setIsWon] = useState<boolean>(false);
+  const [gameState, setGameState] = useState<'playing' | 'won' | 'lost'>('playing');
   const [shakeId, setShakeId] = useState<string | null>(null);
+  const [wrongCount, setWrongCount] = useState<number>(0);
 
   const initGame = useCallback(() => {
     // Random target animal
@@ -43,7 +44,8 @@ export default function AnimalGame() {
       found: false,
       wrong: false
     })));
-    setIsWon(false);
+    setGameState('playing');
+    setWrongCount(0);
   }, []);
 
   useEffect(() => {
@@ -60,7 +62,7 @@ export default function AnimalGame() {
   };
 
   const handleItemClick = (id: string, value: string, found: boolean, wrong?: boolean) => {
-    if (found || isWon || wrong) return;
+    if (found || gameState !== 'playing' || wrong) return;
 
     if (value === targetAnimal) {
       triggerSmallConfetti();
@@ -73,8 +75,11 @@ export default function AnimalGame() {
       
       const unFoundTargets = newItems.filter(item => item.value === targetAnimal && !item.found);
       if (unFoundTargets.length === 0) {
-        setIsWon(true);
+        setGameState('won');
         triggerConfetti();
+        setTimeout(() => {
+          initGame();
+        }, 3000);
       }
     } else {
       playWrongSound();
@@ -83,8 +88,18 @@ export default function AnimalGame() {
       );
       setItems(newItems);
       
-      setShakeId(id);
-      setTimeout(() => setShakeId(null), 500); 
+      const newWrongCount = wrongCount + 1;
+      setWrongCount(newWrongCount);
+      
+      if (newWrongCount >= 3) {
+        setGameState('lost');
+        setTimeout(() => {
+          initGame();
+        }, 3000);
+      } else {
+        setShakeId(id);
+        setTimeout(() => setShakeId(null), 500); 
+      }
     }
   };
 
@@ -157,7 +172,7 @@ export default function AnimalGame() {
                 whileTap={!item.found ? { scale: 0.95 } : {}}
                 onClick={() => handleItemClick(item.id, item.value, item.found, item.wrong)}
                 transition={shakeId === item.id ? { duration: 0.4 } : { type: 'spring', bounce: 0.5 }}
-                disabled={item.found || item.wrong || isWon}
+                disabled={item.found || item.wrong || gameState !== 'playing'}
                 className={`
                   relative aspect-square w-[18vw] max-w-[120px] md:w-full md:max-w-[160px] rounded-[1rem] md:rounded-[2.5rem] flex items-center justify-center text-3xl md:text-7xl font-black border-4 md:border-8 transition-all
                   ${item.found 
@@ -199,7 +214,33 @@ export default function AnimalGame() {
       </div>
 
       <AnimatePresence>
-        {isWon && (
+        {gameState === 'won' && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.5, y: 50 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 50 }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/95 backdrop-blur-md px-8 py-6 rounded-[2rem] shadow-2xl border-4 border-yellow-300 z-50 text-center"
+          >
+            <h2 className="text-3xl md:text-5xl font-black text-emerald-500 mb-2 drop-shadow-sm">Hoan hô!</h2>
+            <p className="text-xl md:text-3xl font-bold text-gray-700">Chúc mừng bé đã hoàn thành!</p>
+          </motion.div>
+        )}
+        
+        {gameState === 'lost' && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.5, y: 50 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 50 }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/95 backdrop-blur-md px-8 py-6 rounded-[2rem] shadow-2xl border-4 border-red-300 z-50 text-center"
+          >
+            <h2 className="text-3xl md:text-5xl font-black text-red-500 mb-2 drop-shadow-sm">Ôi không!</h2>
+            <p className="text-xl md:text-3xl font-bold text-gray-700">Bé đã thua rồi!</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {gameState === 'won' && (
           <motion.button
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -216,7 +257,7 @@ export default function AnimalGame() {
         )}
       </AnimatePresence>
       
-      {!isWon && (
+      {gameState !== 'won' && (
          <motion.button
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -226,7 +267,7 @@ export default function AnimalGame() {
           onClick={initGame}
           className="mt-2 mb-2 md:mt-12 bg-white text-teal-500 font-bold text-base md:text-xl px-4 md:px-8 py-1 md:py-3 rounded-full shadow-sm hover:shadow-md flex items-center gap-2 border-2 border-teal-100 z-10"
         >
-          <RotateCcw size={16} className="md:w-5 md:h-5" />
+          <RotateCcw size={16} className={`md:w-5 md:h-5 ${gameState === 'lost' ? "animate-spin" : ""}`} />
           Đổi bạn khác
         </motion.button>
       )}

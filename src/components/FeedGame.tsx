@@ -4,12 +4,19 @@ import { motion, AnimatePresence } from 'motion/react';
 import { RotateCcw, Star, Sparkles, Utensils } from 'lucide-react';
 import { playCorrectSound, playWrongSound } from '../utils/audio';
 
-const PAIRS = [
+const ALL_PAIRS = [
   { animal: '🐕', food: '🦴' },
   { animal: '🐈', food: '🐟' },
   { animal: '🐇', food: '🥕' },
   { animal: '🐁', food: '🧀' },
   { animal: '🐒', food: '🍌' },
+  { animal: '🐘', food: '🥜' },
+  { animal: '🐼', food: '🎋' },
+  { animal: '🐸', food: '🦟' },
+  { animal: '🐻', food: '🍯' },
+  { animal: '🐔', food: '🐛' },
+  { animal: '🐄', food: '🌿' },
+  { animal: '🐎', food: '🍎' },
 ];
 
 interface GameItem {
@@ -21,22 +28,27 @@ interface GameItem {
 export default function FeedGame() {
   const [animals, setAnimals] = useState<GameItem[]>([]);
   const [foods, setFoods] = useState<GameItem[]>([]);
+  const [gameState, setGameState] = useState<'playing' | 'won' | 'lost'>('playing');
+  const [wrongCount, setWrongCount] = useState<number>(0);
   
   const [selectedAnimal, setSelectedAnimal] = useState<string | null>(null);
   const [selectedFood, setSelectedFood] = useState<string | null>(null);
   
   const [shakeAnimal, setShakeAnimal] = useState<string | null>(null);
   const [shakeFood, setShakeFood] = useState<string | null>(null);
-  const [isWon, setIsWon] = useState(false);
 
   const initGame = useCallback(() => {
-    const shuffledAnimals = [...PAIRS].sort(() => Math.random() - 0.5).map(p => ({
+    // Select 5 random pairs
+    const shuffledAll = [...ALL_PAIRS].sort(() => Math.random() - 0.5);
+    const selectedPairs = shuffledAll.slice(0, 5);
+    
+    const shuffledAnimals = [...selectedPairs].sort(() => Math.random() - 0.5).map(p => ({
       id: `animal-${p.animal}`,
       emoji: p.animal,
       matched: false
     }));
     
-    const shuffledFoods = [...PAIRS].sort(() => Math.random() - 0.5).map(p => ({
+    const shuffledFoods = [...selectedPairs].sort(() => Math.random() - 0.5).map(p => ({
       id: `food-${p.food}`,
       emoji: p.food,
       matched: false
@@ -46,7 +58,8 @@ export default function FeedGame() {
     setFoods(shuffledFoods);
     setSelectedAnimal(null);
     setSelectedFood(null);
-    setIsWon(false);
+    setGameState('playing');
+    setWrongCount(0);
   }, []);
 
   useEffect(() => {
@@ -87,7 +100,7 @@ export default function FeedGame() {
 
   useEffect(() => {
     if (selectedAnimal && selectedFood) {
-      const pair = PAIRS.find(p => p.animal === selectedAnimal);
+      const pair = ALL_PAIRS.find(p => p.animal === selectedAnimal);
       if (pair && pair.food === selectedFood) {
         // Match
         triggerSmallConfetti();
@@ -99,24 +112,37 @@ export default function FeedGame() {
       } else {
         // Wrong
         playWrongSound();
-        setShakeAnimal(selectedAnimal);
-        setShakeFood(selectedFood);
-        setTimeout(() => {
-          setShakeAnimal(null);
-          setShakeFood(null);
-          setSelectedAnimal(null);
-          setSelectedFood(null);
-        }, 600);
+        const newWrongCount = wrongCount + 1;
+        setWrongCount(newWrongCount);
+        
+        if (newWrongCount >= 3) {
+          setGameState('lost');
+          setTimeout(() => {
+            initGame();
+          }, 3000);
+        } else {
+          setShakeAnimal(selectedAnimal);
+          setShakeFood(selectedFood);
+          setTimeout(() => {
+            setShakeAnimal(null);
+            setShakeFood(null);
+            setSelectedAnimal(null);
+            setSelectedFood(null);
+          }, 600);
+        }
       }
     }
-  }, [selectedAnimal, selectedFood]);
+  }, [selectedAnimal, selectedFood, wrongCount, initGame]);
 
   useEffect(() => {
     if (animals.length > 0 && animals.every(a => a.matched)) {
-      setIsWon(true);
+      setGameState('won');
       triggerWinConfetti();
+      setTimeout(() => {
+        initGame();
+      }, 3000);
     }
-  }, [animals]);
+  }, [animals, initGame]);
 
   return (
     <div className="h-[100dvh] bg-gradient-to-br from-amber-100 via-orange-100 to-rose-200 flex flex-col items-center pt-16 pb-2 md:pt-24 md:pb-10 px-2 md:px-4 relative overflow-hidden">
@@ -164,7 +190,7 @@ export default function FeedGame() {
                   if (!item.matched && !shakeAnimal) setSelectedAnimal(item.emoji);
                 }}
                 transition={shakeAnimal === item.emoji ? { duration: 0.4 } : { type: 'spring', bounce: 0.5 }}
-                disabled={item.matched || isWon || shakeAnimal !== null}
+                disabled={item.matched || gameState !== 'playing' || shakeAnimal !== null}
                 className={`
                   relative w-full flex-1 min-h-0 md:aspect-[3/1] max-w-[140px] md:max-w-[200px] rounded-[1rem] md:rounded-[2rem] flex items-center justify-center text-4xl md:text-7xl font-black border-[3px] md:border-4 transition-all
                   ${item.matched 
@@ -214,7 +240,7 @@ export default function FeedGame() {
                   if (!item.matched && !shakeFood) setSelectedFood(item.emoji);
                 }}
                 transition={shakeFood === item.emoji ? { duration: 0.4 } : { type: 'spring', bounce: 0.5 }}
-                disabled={item.matched || isWon || shakeFood !== null}
+                disabled={item.matched || gameState !== 'playing' || shakeFood !== null}
                 className={`
                   relative w-full flex-1 min-h-0 md:aspect-[3/1] max-w-[140px] md:max-w-[200px] rounded-[1rem] md:rounded-[2rem] flex items-center justify-center text-4xl md:text-7xl font-black border-[3px] md:border-4 transition-all
                   ${item.matched 
@@ -249,9 +275,35 @@ export default function FeedGame() {
         </div>
       </div>
 
+      <AnimatePresence>
+        {gameState === 'won' && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.5, y: 50 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 50 }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/95 backdrop-blur-md px-8 py-6 rounded-[2rem] shadow-2xl border-4 border-yellow-300 z-50 text-center"
+          >
+            <h2 className="text-3xl md:text-5xl font-black text-emerald-500 mb-2 drop-shadow-sm">Hoan hô!</h2>
+            <p className="text-xl md:text-3xl font-bold text-gray-700">Chúc mừng bé đã hoàn thành!</p>
+          </motion.div>
+        )}
+        
+        {gameState === 'lost' && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.5, y: 50 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 50 }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/95 backdrop-blur-md px-8 py-6 rounded-[2rem] shadow-2xl border-4 border-red-300 z-50 text-center"
+          >
+            <h2 className="text-3xl md:text-5xl font-black text-red-500 mb-2 drop-shadow-sm">Ôi không!</h2>
+            <p className="text-xl md:text-3xl font-bold text-gray-700">Bé đã thua rồi!</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Restart Button */}
       <AnimatePresence>
-        {isWon && (
+        {gameState === 'won' && (
           <motion.button
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -268,7 +320,7 @@ export default function FeedGame() {
         )}
       </AnimatePresence>
       
-      {!isWon && (
+      {gameState !== 'won' && (
          <motion.button
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -278,7 +330,7 @@ export default function FeedGame() {
           onClick={initGame}
           className="absolute bottom-1 md:bottom-12 bg-white text-orange-400 font-bold text-base md:text-xl px-4 md:px-8 py-1 md:py-3 rounded-full shadow-sm hover:shadow-md flex items-center gap-2 border-2 border-orange-100 z-30"
         >
-          <RotateCcw size={16} className="md:w-5 md:h-5" />
+          <RotateCcw size={16} className={`md:w-5 md:h-5 ${gameState === 'lost' ? "animate-spin" : ""}`} />
           Chơi lại
         </motion.button>
       )}

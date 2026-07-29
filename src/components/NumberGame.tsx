@@ -14,8 +14,9 @@ interface NumberItem {
 export default function NumberGame() {
   const [targetNumber, setTargetNumber] = useState<number>(1);
   const [items, setItems] = useState<NumberItem[]>([]);
-  const [isWon, setIsWon] = useState<boolean>(false);
+  const [gameState, setGameState] = useState<'playing' | 'won' | 'lost'>('playing');
   const [shakeId, setShakeId] = useState<string | null>(null);
+  const [wrongCount, setWrongCount] = useState<number>(0);
 
   const initGame = useCallback(() => {
     const newTarget = Math.floor(Math.random() * 5) + 1;
@@ -36,7 +37,8 @@ export default function NumberGame() {
       found: false,
       wrong: false
     })));
-    setIsWon(false);
+    setGameState('playing');
+    setWrongCount(0);
   }, []);
 
   useEffect(() => {
@@ -53,7 +55,7 @@ export default function NumberGame() {
   };
 
   const handleItemClick = (id: string, value: number, found: boolean, wrong?: boolean) => {
-    if (found || isWon || wrong) return;
+    if (found || gameState !== 'playing' || wrong) return;
 
     if (value === targetNumber) {
       triggerSmallConfetti();
@@ -66,8 +68,11 @@ export default function NumberGame() {
       
       const unFoundTargets = newItems.filter(item => item.value === targetNumber && !item.found);
       if (unFoundTargets.length === 0) {
-        setIsWon(true);
+        setGameState('won');
         triggerConfetti();
+        setTimeout(() => {
+          initGame();
+        }, 3000);
       }
     } else {
       playWrongSound();
@@ -76,8 +81,18 @@ export default function NumberGame() {
       );
       setItems(newItems);
       
-      setShakeId(id);
-      setTimeout(() => setShakeId(null), 500); 
+      const newWrongCount = wrongCount + 1;
+      setWrongCount(newWrongCount);
+      
+      if (newWrongCount >= 3) {
+        setGameState('lost');
+        setTimeout(() => {
+          initGame();
+        }, 3000);
+      } else {
+        setShakeId(id);
+        setTimeout(() => setShakeId(null), 500); 
+      }
     }
   };
 
@@ -141,7 +156,7 @@ export default function NumberGame() {
                 whileTap={!item.found ? { scale: 0.95 } : {}}
                 onClick={() => handleItemClick(item.id, item.value, item.found, item.wrong)}
                 transition={shakeId === item.id ? { duration: 0.4 } : { type: 'spring', bounce: 0.5 }}
-                disabled={item.found || item.wrong || isWon}
+                disabled={item.found || item.wrong || gameState !== 'playing'}
                 className={`
                   relative aspect-square w-[18vw] max-w-[120px] md:w-full md:max-w-[160px] rounded-full flex items-center justify-center text-3xl md:text-7xl font-black border-4 md:border-8 transition-colors
                   ${item.found 
@@ -182,6 +197,32 @@ export default function NumberGame() {
         </div>
       </div>
 
+      <AnimatePresence>
+        {gameState === 'won' && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.5, y: 50 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 50 }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/95 backdrop-blur-md px-8 py-6 rounded-[2rem] shadow-2xl border-4 border-yellow-300 z-50 text-center"
+          >
+            <h2 className="text-3xl md:text-5xl font-black text-emerald-500 mb-2 drop-shadow-sm">Hoan hô!</h2>
+            <p className="text-xl md:text-3xl font-bold text-gray-700">Chúc mừng bé đã hoàn thành!</p>
+          </motion.div>
+        )}
+        
+        {gameState === 'lost' && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.5, y: 50 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 50 }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/95 backdrop-blur-md px-8 py-6 rounded-[2rem] shadow-2xl border-4 border-red-300 z-50 text-center"
+          >
+            <h2 className="text-3xl md:text-5xl font-black text-red-500 mb-2 drop-shadow-sm">Ôi không!</h2>
+            <p className="text-xl md:text-3xl font-bold text-gray-700">Bé đã thua rồi!</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -191,8 +232,8 @@ export default function NumberGame() {
         onClick={initGame}
         className="mt-2 mb-2 md:mt-12 bg-gradient-to-b from-orange-400 to-orange-600 text-white font-black text-lg md:text-3xl px-6 md:px-10 py-2 md:py-5 rounded-full shadow-[0_4px_0_0_rgba(194,65,12,1)] md:shadow-[0_8px_0_0_rgba(194,65,12,1)] hover:shadow-[0_12px_0_0_rgba(194,65,12,1)] hover:-translate-y-1 active:translate-y-2 active:shadow-none flex items-center gap-2 md:gap-4 border-2 md:border-4 border-orange-300"
       >
-        <RotateCcw size={20} className={`md:w-8 md:h-8 ${isWon ? "animate-spin" : ""}`} />
-        {isWon ? 'CHƠI TIẾP NÀO!' : 'ĐỔI SỐ KHÁC'}
+        <RotateCcw size={20} className={`md:w-8 md:h-8 ${gameState !== 'playing' ? "animate-spin" : ""}`} />
+        {gameState === 'won' ? 'CHƠI TIẾP NÀO!' : 'ĐỔI SỐ KHÁC'}
       </motion.button>
     </div>
   );
