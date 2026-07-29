@@ -5,13 +5,14 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { PawPrint, Hash, Utensils } from 'lucide-react';
+import { PawPrint, Hash, Utensils, Carrot } from 'lucide-react';
 import NumberGame from './components/NumberGame';
 import AnimalGame from './components/AnimalGame';
 import FeedGame from './components/FeedGame';
+import VegetableGame from './components/VegetableGame';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'number' | 'animal' | 'feed'>('number');
+  const [activeTab, setActiveTab] = useState<'number' | 'animal' | 'feed' | 'vegetable'>('number');
 
   return (
     <div className="relative font-nunito h-[100dvh] overflow-hidden">
@@ -57,6 +58,19 @@ export default function App() {
               <Utensils size={18} className="md:w-6 md:h-6" strokeWidth={3} />
               Cho Ăn
             </button>
+            <button 
+              onClick={() => setActiveTab('vegetable')}
+              className={`
+                flex items-center gap-1 md:gap-2 px-3 md:px-6 py-1.5 md:py-3 rounded-full font-black text-sm md:text-xl transition-all whitespace-nowrap
+                ${activeTab === 'vegetable' 
+                  ? 'bg-lime-500 text-white shadow-inner scale-100' 
+                  : 'bg-transparent text-slate-400 hover:bg-slate-100 hover:scale-105'
+                }
+              `}
+            >
+              <Carrot size={18} className="md:w-6 md:h-6" strokeWidth={3} />
+              Tìm Rau Củ
+            </button>
          </div>
       </div>
 
@@ -72,6 +86,7 @@ export default function App() {
           {activeTab === 'number' && <NumberGame />}
           {activeTab === 'animal' && <AnimalGame />}
           {activeTab === 'feed' && <FeedGame />}
+          {activeTab === 'vegetable' && <VegetableGame />}
         </motion.div>
       </AnimatePresence>
     </div>
