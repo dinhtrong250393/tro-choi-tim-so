@@ -3,6 +3,7 @@ import confetti from 'canvas-confetti';
 import { motion, AnimatePresence } from 'motion/react';
 import { RotateCcw, Star, Sparkles, X } from 'lucide-react';
 import { playCorrectSound, playWrongSound } from '../utils/audio';
+import { IMAGE_MAP } from '../data/images';
 
 interface AnimalItem {
   id: string;
@@ -11,7 +12,7 @@ interface AnimalItem {
   wrong?: boolean;
 }
 
-const ANIMALS = ['🐕', '🐈', '🐇', '🐅', '🐄', '🐖', '🐘', '🦒', '🐎', '🦘', '🦌', '🐪'];
+const ANIMALS = ['🐕', '🐈', '🐇', '🐒', '🐘', '🐼', '🐸', '🐻', '🐔', '🐄', '🐎'];
 
 export default function AnimalGame() {
   const [targetAnimal, setTargetAnimal] = useState<string>('🐕');
@@ -146,9 +147,9 @@ export default function AnimalGame() {
           <motion.div 
             animate={{ y: [0, -5, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="text-3xl md:text-6xl mx-1 md:mx-2 drop-shadow-md bg-teal-50 px-3 md:px-4 py-0 md:py-2 rounded-xl md:rounded-3xl border-2 md:border-4 border-teal-100"
+            className="text-3xl md:text-6xl mx-1 md:mx-2 drop-shadow-md bg-teal-50 px-3 md:px-4 py-2 md:py-3 rounded-xl md:rounded-3xl border-2 md:border-4 border-teal-100 flex items-center justify-center min-w-[3rem] min-h-[3rem] md:min-w-[5rem] md:min-h-[5rem]"
           >
-            {targetAnimal}
+            {IMAGE_MAP[targetAnimal] ? <img src={IMAGE_MAP[targetAnimal]} alt="target" className="w-10 h-10 md:w-16 md:h-16 object-cover rounded-full shadow-sm" /> : targetAnimal}
           </motion.div>
           nhé!
           <Star className="text-yellow-400 fill-yellow-400 hidden md:block" size={40} />
@@ -186,8 +187,10 @@ export default function AnimalGame() {
               >
                 {item.wrong ? (
                   <X size={40} className="text-red-400 drop-shadow-sm md:w-16 md:h-16" strokeWidth={5} />
+                ) : IMAGE_MAP[item.value] ? (
+                  <img src={IMAGE_MAP[item.value]} alt="animal" className="w-16 h-16 md:w-24 md:h-24 object-cover rounded-[1rem] shadow-sm pointer-events-none" />
                 ) : (
-                  <span className="drop-shadow-sm">{item.value}</span>
+                  <span className="drop-shadow-sm pointer-events-none">{item.value}</span>
                 )}
                 {item.found && (
                   <motion.div 

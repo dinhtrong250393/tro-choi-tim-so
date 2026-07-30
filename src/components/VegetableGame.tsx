@@ -3,6 +3,7 @@ import confetti from 'canvas-confetti';
 import { motion, AnimatePresence } from 'motion/react';
 import { RotateCcw, Star, Sparkles, X } from 'lucide-react';
 import { playCorrectSound, playWrongSound } from '../utils/audio';
+import { IMAGE_MAP } from '../data/images';
 
 interface VegetableItem {
   id: string;
@@ -146,9 +147,9 @@ export default function VegetableGame() {
           <motion.div 
             animate={{ y: [0, -5, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="text-3xl md:text-6xl mx-1 md:mx-2 drop-shadow-md bg-lime-50 px-3 md:px-4 py-0 md:py-2 rounded-xl md:rounded-3xl border-2 md:border-4 border-lime-100"
+            className="text-3xl md:text-6xl mx-1 md:mx-2 drop-shadow-md bg-lime-50 px-3 md:px-4 py-2 md:py-3 rounded-xl md:rounded-3xl border-2 md:border-4 border-lime-100 flex items-center justify-center min-w-[3rem] min-h-[3rem] md:min-w-[5rem] md:min-h-[5rem]"
           >
-            {targetVeggie}
+            {IMAGE_MAP[targetVeggie] ? <img src={IMAGE_MAP[targetVeggie]} alt="target" className="w-10 h-10 md:w-16 md:h-16 object-cover rounded-full shadow-sm" /> : targetVeggie}
           </motion.div>
           nhé!
           <Star className="text-yellow-400 fill-yellow-400 hidden md:block" size={40} />
@@ -186,8 +187,10 @@ export default function VegetableGame() {
               >
                 {item.wrong ? (
                   <X size={40} className="text-red-400 drop-shadow-sm md:w-16 md:h-16" strokeWidth={5} />
+                ) : IMAGE_MAP[item.value] ? (
+                  <img src={IMAGE_MAP[item.value]} alt="veggie" className="w-16 h-16 md:w-24 md:h-24 object-cover rounded-[1rem] shadow-sm pointer-events-none" />
                 ) : (
-                  <span className="drop-shadow-sm">{item.value}</span>
+                  <span className="drop-shadow-sm pointer-events-none">{item.value}</span>
                 )}
                 {item.found && (
                   <motion.div 

@@ -3,12 +3,12 @@ import confetti from 'canvas-confetti';
 import { motion, AnimatePresence } from 'motion/react';
 import { RotateCcw, Star, Sparkles, Utensils } from 'lucide-react';
 import { playCorrectSound, playWrongSound } from '../utils/audio';
+import { IMAGE_MAP } from '../data/images';
 
 const ALL_PAIRS = [
   { animal: '🐕', food: '🦴' },
   { animal: '🐈', food: '🐟' },
   { animal: '🐇', food: '🥕' },
-  { animal: '🐁', food: '🧀' },
   { animal: '🐒', food: '🍌' },
   { animal: '🐘', food: '🥜' },
   { animal: '🐼', food: '🎋' },
@@ -202,13 +202,17 @@ export default function FeedGame() {
                   ${shakeAnimal === item.emoji ? 'bg-red-100 border-red-300 shadow-[0_4px_0_0_rgba(252,165,165,1)] md:shadow-[0_6px_0_0_rgba(252,165,165,1)]' : ''}
                 `}
               >
-                <motion.span 
-                  className="drop-shadow-sm"
-                  animate={selectedAnimal === item.emoji ? { y: [-5, 5, -5] } : {}}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  {item.emoji}
-                </motion.span>
+                {IMAGE_MAP[item.emoji] ? (
+                  <img src={IMAGE_MAP[item.emoji]} alt="animal" className="w-16 h-16 md:w-32 md:h-32 object-cover rounded-[1rem] shadow-sm pointer-events-none" />
+                ) : (
+                  <motion.span 
+                    className="drop-shadow-sm pointer-events-none"
+                    animate={selectedAnimal === item.emoji ? { y: [-5, 5, -5] } : {}}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    {item.emoji}
+                  </motion.span>
+                )}
                 {item.matched && (
                   <motion.div 
                     initial={{ scale: 0 }}
@@ -252,13 +256,17 @@ export default function FeedGame() {
                   ${shakeFood === item.emoji ? 'bg-red-100 border-red-300 shadow-[0_4px_0_0_rgba(252,165,165,1)] md:shadow-[0_6px_0_0_rgba(252,165,165,1)]' : ''}
                 `}
               >
-                <motion.span 
-                  className="drop-shadow-sm"
-                  animate={selectedFood === item.emoji ? { y: [-5, 5, -5] } : {}}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  {item.emoji}
-                </motion.span>
+                {IMAGE_MAP[item.emoji] ? (
+                  <img src={IMAGE_MAP[item.emoji]} alt="food" className="w-16 h-16 md:w-32 md:h-32 object-cover rounded-[1rem] shadow-sm pointer-events-none" />
+                ) : (
+                  <motion.span 
+                    className="drop-shadow-sm pointer-events-none"
+                    animate={selectedFood === item.emoji ? { y: [-5, 5, -5] } : {}}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    {item.emoji}
+                  </motion.span>
+                )}
                 {item.matched && (
                   <motion.div 
                     initial={{ scale: 0 }}
