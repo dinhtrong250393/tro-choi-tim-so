@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { PawPrint, Hash, Utensils, Carrot } from 'lucide-react';
+import { PawPrint, Hash, Utensils, Carrot, Maximize, Minimize } from 'lucide-react';
 import NumberGame from './components/NumberGame';
 import AnimalGame from './components/AnimalGame';
 import FeedGame from './components/FeedGame';
@@ -13,6 +13,32 @@ import VegetableGame from './components/VegetableGame';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'number' | 'animal' | 'feed' | 'vegetable'>('number');
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
+  const toggleFullscreen = async () => {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        }
+      }
+    } catch (err) {
+      console.error("Error attempting to toggle fullscreen:", err);
+    }
+  };
 
   return (
     <div className="relative font-nunito h-[100dvh] overflow-hidden">
@@ -89,6 +115,14 @@ export default function App() {
           {activeTab === 'vegetable' && <VegetableGame />}
         </motion.div>
       </AnimatePresence>
+
+      <button
+        onClick={toggleFullscreen}
+        className="fixed bottom-4 right-4 z-50 bg-white/80 backdrop-blur-md p-3 rounded-full shadow-lg border-2 border-white text-slate-500 hover:text-slate-800 hover:scale-105 active:scale-95 transition-all"
+        title={isFullscreen ? "Thoát toàn màn hình" : "Toàn màn hình"}
+      >
+        {isFullscreen ? <Minimize size={24} /> : <Maximize size={24} />}
+      </button>
     </div>
   );
 }
